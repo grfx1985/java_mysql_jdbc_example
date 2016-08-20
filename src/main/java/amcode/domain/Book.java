@@ -45,6 +45,13 @@ public class Book {
 		this.pages = pages;
 
 	}
+	public Book(int id ,String title, String author, int pages) {
+		this.id = id;
+		this.title = title;		
+		this.author = author;
+		this.pages = pages;
+
+	}
 	@Override
 	public String toString(){
 		return author+" "+ title+ " " +pages;

@@ -4,6 +4,7 @@ package amcode.dao;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -66,15 +67,17 @@ public class BookDaoSqlLite implements BookDao {
 			ResultSet result = statement.executeQuery("SELECT * FROM Books");
 			String title, author;
 			int pages;
+			int id;
 			/*
 			 * Pozytywne Myślenie, 20
 			 * Programowanie w Javie, 200
 			 */
 			while ( result.next()){
+				id = result.getInt("id");
 				title = result.getString("title");
 				author = result.getString("author");
 				pages = result.getInt("pages");
-				books.add(new Book(title,author,pages));
+				books.add(new Book(id,title,author,pages));
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -82,6 +85,23 @@ public class BookDaoSqlLite implements BookDao {
 		}
 
 		return books;
+	}
+
+	public Book find(int id) throws SQLException {
+		Book book = null;
+		
+		String sql = "SELECT id,title,author,pages FROM Books WHERE id=?";
+		
+        PreparedStatement statement = connection.prepareStatement(sql);
+        statement.setInt(1, id);
+        ResultSet resultSet = statement.executeQuery();
+        while (resultSet.next()) {
+            String title = resultSet.getString("title");
+            String author = resultSet.getString("author");
+            int pages = resultSet.getInt("pages");
+            book = new Book(id, title, author,pages);
+        }
+        return book;
 	}
 
 }

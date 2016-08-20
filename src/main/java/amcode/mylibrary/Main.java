@@ -1,5 +1,6 @@
 package amcode.mylibrary;
 
+import java.sql.SQLException;
 import java.util.Scanner;
 
 import amcode.dao.BookDao;
@@ -10,12 +11,12 @@ public class Main {
 
 	private static Scanner scanner;
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws SQLException {
 		BookDao bookDao;
 		bookDao = new BookDaoSqlLite();
 		scanner = new Scanner(System.in);
 		int number = 0;
-		String title,author;
+		String title, author;
 		int pages;
 		do {
 
@@ -32,15 +33,30 @@ public class Main {
 				author = scanner.next();
 				System.out.println("Podaj liczbę stron");
 				pages = scanner.nextInt();
-				bookDao.addBook(new Book(title,author,pages));
+				bookDao.addBook(new Book(title, author, pages));
 				break;
 			case 2:
-				// praca do domu:)
-				break;
-			case 3:
-				for (Book book:bookDao.listBooks() ){
+				for (Book book : bookDao.listBooks()) {
 					System.out.println(book);
 				}
+				System.out.print("\n\n\tPodaj id ksiazki do usuniecia: ");
+                int id = scanner.nextInt();
+                scanner.nextLine();
+                Book book;
+                book = bookDao.find(id);
+                bookDao.removeBook(book);
+                System.out.println("Ksiazka zostala usunieta");
+				// praca do domu:)
+				break;
+			
+			case 3:
+				for (Book books : bookDao.listBooks()) {
+					System.out.println(books);
+				}
+				break;
+			case 4:
+				System.out.println("Koniec programu");
+				System.exit(0);
 				break;
 			}
 
